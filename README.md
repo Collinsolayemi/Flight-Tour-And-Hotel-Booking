@@ -9,9 +9,7 @@
 - User will be able to add a bio, a nickname, and upload any photos now if they
 choose
 - If users opt out of taking the survey, they will be prompted to take the survey at
-different times in notification format
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+different times in notification format.
 
 
 
