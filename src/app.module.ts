@@ -6,7 +6,6 @@ import * as mysql from 'mysql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 
-
 @Module({
   imports: [
     TypeOrmModule.forRoot({
