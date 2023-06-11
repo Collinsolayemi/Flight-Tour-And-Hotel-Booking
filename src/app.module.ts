@@ -6,6 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { AuthService } from './Auth/service/auth-service';
 import { AuthModule } from './Auth/module/auth-module';
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+
+
 
 @Module({
   imports: [
@@ -13,13 +18,14 @@ import { AuthModule } from './Auth/module/auth-module';
       type: 'mysql',
       host: '127.0.0.1',
       port: 3306,
-      username: 'root',
+      username: process.env.DB_USERNAME ,
       password: '',
-      database: 'travel_hotline',
+      database: process.env.DB_NAME,
       entities: [User],
       synchronize: true,
     }),
-    UserModule, AuthModule
+    UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, AuthService],
