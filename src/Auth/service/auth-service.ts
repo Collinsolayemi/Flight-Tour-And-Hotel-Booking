@@ -6,7 +6,6 @@ import { SignUpDto } from '../dto/sign-up-dto';
 export class AuthService {
     async signUp(data: SignUpDto) {
       //Check if the input email is in use  already in use.
-        
         return 'signup succesfully'
   }
 }
