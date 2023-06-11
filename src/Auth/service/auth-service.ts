@@ -5,7 +5,7 @@ import { SignUpDto } from '../dto/sign-up-dto';
 @Injectable()
 export class AuthService {
     async signUp(data: SignUpDto) {
-      //Check if the input email is in use  alre
+      //Check if the input email is in use  already in use.
         
         return 'signup succesfully'
   }
