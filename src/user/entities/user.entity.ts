@@ -1,5 +1,5 @@
+import { Exclude, Expose } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-//import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -7,20 +7,28 @@ export class User {
   id: number;
 
   @Column()
+  @Expose()
   username: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column()
+  @Expose()
   email: string;
 
   @Column()
+  @Expose()
   phone_number: string;
 
+  @Expose()
   @Column()
   profile_picture: string;
 
+  @Expose()
   @Column()
   birthday: string;
+
+  
 }
