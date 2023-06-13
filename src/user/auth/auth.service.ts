@@ -36,7 +36,19 @@ export class AuthService {
       throw new NotFoundException('User not found, please signup');
     }
 
-      //compaare stored password with input password
-    
+    //compaare stored password with input password
+    const compaarePassword = await bcrypt.compare(
+      signInDto.password,
+      checkUser.password,
+    );
+
+    if (!compaarePassword) {
+      throw new NotFoundException(
+        'Password incorrect , please retype your password',
+      );
+    }
+
+
+    //generate token to authenticate user 
   }
 }
