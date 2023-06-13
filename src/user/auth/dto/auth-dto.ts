@@ -4,13 +4,12 @@ import {
   IsDefined,
   IsEmail,
   IsNotEmpty,
-  IsOptional,
+  IsPhoneNumber,
   IsString,
   Length,
 } from 'class-validator';
 
 export class SignUpDto {
-  @IsOptional()
   id?: number;
 
   @ApiProperty({ example: 'username' })
@@ -26,11 +25,11 @@ export class SignUpDto {
   @ApiProperty({ example: 'name@example.com' })
   @IsEmail()
   @IsNotEmpty()
-  @IsString()
   public readonly email: string;
 
   @ApiProperty({ example: '08154640543' })
   @IsNotEmpty()
+  @IsPhoneNumber('NG')
   public readonly phone_number: string;
 
   @IsNotEmpty()
@@ -39,6 +38,6 @@ export class SignUpDto {
 
   @IsNotEmpty()
   @IsDate()
-  @ApiProperty({ type: String, format: 'date' })
+  @ApiProperty({ type: Date, format: 'date' })
   public readonly birthday: Date;
 }

@@ -2,23 +2,37 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
-
+import { SignUpDto } from './auth/dto/auth-dto';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectRepository(User) private repo: Repository<User>) { }
-  
-  // create(createUserDto: CreateUserDto) {
-  //   return 'This action adds a new user';
-  // }
+  constructor(@InjectRepository(User) private repo: Repository<User>) {}
+  async create(createUserDto: SignUpDto) {
+    const { email, username, password, phone_number, birthday, profile_picture } = createUserDto;
+
+    const newUser = new User();
+    newUser.email = email;
+    newUser.username = username;
+    newUser.password = password;
+    newUser.birthday = new Date(birthday).toISOString(); // convert Date to string
+    newUser.phone_number = phone_number;
+    newUser.profile_picture = profile_picture;
+
+    const user = await this.repo.create(newUser);
+    return this.repo.save(user);
+  }
+
+  find(email: string) {
+    return this.repo.findOne({ where: { email } });
+  }
 
   findAll() {
     return `This action returns all user`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+  // findOne(id: number) {
+  //   return `This action returns a #${id} user`;
+  // }
 
   // update(id: number, updateUserDto: UpdateUserDto) {
   //   return `This action updates a #${id} user`;
