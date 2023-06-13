@@ -41,3 +41,17 @@ export class SignUpDto {
   @ApiProperty({ type: Date, format: 'date' })
   public readonly birthday: Date;
 }
+
+export class SignInDto {
+  public readonly id: string;
+
+  @ApiProperty({ example: 'name@example.com' })
+  @IsEmail()
+  @IsNotEmpty()
+  public readonly email: string;
+
+  @ApiProperty({ example: 'password' })
+  @IsString()
+  @Length(3, 20, { message: 'password must be between 3 and 20 characters' })
+  public readonly password: string;
+}

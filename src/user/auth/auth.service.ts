@@ -38,4 +38,6 @@ export class AuthService {
     const user = await this.userService.create(signUpDto);
     return user;
   }
+
+  async signin() {}
 }
