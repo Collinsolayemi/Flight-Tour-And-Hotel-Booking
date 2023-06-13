@@ -7,7 +7,7 @@ import { SignUpDto } from './auth/dto/auth-dto';
 @Injectable()
 export class UserService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
-  async create(createUserDto: SignUpDto) {
+  async create(createUserDto: SignUpDto) : Promise<User> {
     const { email, username, password, phone_number, birthday, profile_picture } = createUserDto;
 
     const newUser = new User();
