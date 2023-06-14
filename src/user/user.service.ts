@@ -29,11 +29,11 @@ export class UserService {
     return this.repo.save(user);
   }
 
-  findEmail(email: string) {
+  findByEmail(email: string) {
     return this.repo.findOne({ where: { email } });
   }
 
-  findUsername(username: string) {
+  findByUsername(username: string) {
     return this.repo.findOne({ where: { username } });
   }
 
