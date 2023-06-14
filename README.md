@@ -21,7 +21,7 @@ different times in notification format.
 
 ### Getting started
 
-- clone the repository `[https://github.com/Collinsolayemi/nestjs-used-cars-pricing-api.git](https://github.com/Collinsolayemi/The-Travel-Hotline.git)`
+- clone the repository `https://github.com/Sulaymaanabubakr/Travelhotlinemobile.git`
 
 ## Installation
 
