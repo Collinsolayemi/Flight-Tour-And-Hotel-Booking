@@ -20,6 +20,11 @@ export class SignUpDto {
   @Length(3, 20, { message: 'password must be between 3 and 20 characters' })
   public password: string;
 
+  @ApiProperty({ example: 'password' })
+  @IsString()
+  @Length(3, 20, { message: 'password must be between 3 and 20 characters' })
+  public confirm_password: string;
+
   @ApiProperty({ example: 'name@example.com' })
   @IsEmail()
   public readonly email: string;
@@ -41,9 +46,8 @@ export class SignUpDto {
 
 export class SignInDto {
   @ApiProperty({ example: 'name@example.com' })
-  @IsEmail({}, { message: 'Invalid email format' })
-  @IsNotEmpty({ message: 'Email cannot be empty' })
-  public readonly email: string;
+  @IsNotEmpty({ message: 'Username cannot be empty' })
+  public readonly username: string;
 
   @ApiProperty({ example: 'password' })
   @IsString({ message: 'Password must be a string' })

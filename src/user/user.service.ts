@@ -7,8 +7,15 @@ import { SignUpDto } from './auth/dto/auth-dto';
 @Injectable()
 export class UserService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
-  async create(createUserDto: SignUpDto) : Promise<User> {
-    const { email, username, password, phone_number, birthday, profile_picture } = createUserDto;
+  async create(createUserDto: SignUpDto): Promise<User> {
+    const {
+      email,
+      username,
+      password,
+      phone_number,
+      birthday,
+      profile_picture,
+    } = createUserDto;
 
     const newUser = new User();
     newUser.email = email;
@@ -22,8 +29,12 @@ export class UserService {
     return this.repo.save(user);
   }
 
-  find(email: string) {
+  findEmail(email: string) {
     return this.repo.findOne({ where: { email } });
+  }
+
+  findUsername(username: string) {
+    return this.repo.findOne({ where: { username } });
   }
 
   findAll() {
