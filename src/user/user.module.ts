@@ -8,11 +8,14 @@ import { AuthService } from './auth/auth.service';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { MailService } from './auth/email/mail-service';
 import * as dotenv from 'dotenv';
+import { HttpModule } from '@nestjs/axios';
+import { TwilioService } from './auth/twillo/twilio-service';
+
 dotenv.config();
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [HttpModule,TypeOrmModule.forFeature([User])],
   controllers: [UserController, AuthController],
-  providers: [UserService, AuthService, JwtService, MailService],
+  providers: [UserService, AuthService, JwtService, MailService, TwilioService],
 })
 export class UserModule {}

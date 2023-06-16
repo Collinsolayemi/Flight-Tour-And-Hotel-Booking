@@ -7,9 +7,15 @@ import { User } from './user/entities/user.entity';
 import * as dotenv from 'dotenv';
 dotenv.config();
 import { JwtModule } from '@nestjs/jwt';
+import { TwilioModule } from 'nestjs-twilio';
+import { TwilioService } from './user/auth/twillo/twilio-service';
 
 @Module({
   imports: [
+    TwilioModule.forRoot({
+      accountSid: process.env.SID,
+      authToken: process.env.TWILIO_AUTH_TOKEN,
+    }),
     JwtModule.register({
       secret: process.env.SECRET,
       signOptions: { expiresIn: '1h' },
@@ -27,6 +33,7 @@ import { JwtModule } from '@nestjs/jwt';
     UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, TwilioService],
 })
+  
 export class AppModule {}

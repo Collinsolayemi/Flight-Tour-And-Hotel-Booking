@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.8.1",
+    "@nestjs/axios": "^3.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.4",
     "@nestjs/core": "^9.0.0",
@@ -31,6 +32,7 @@
     "@nestjs/typeorm": "^9.0.1",
     "@types/bcryptjs": "^2.4.2",
     "@types/nodemailer": "^6.4.8",
+    "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
@@ -40,10 +42,14 @@
     "handlebars": "^4.7.7",
     "mysql": "^2.18.1",
     "mysql2": "^3.3.0",
+    "nestjs-twilio": "^4.1.1",
     "nodemailer": "^6.9.3",
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
+    "sendchamp": "^1.0.8",
+    "termii-sdk": "^0.2.0",
+    "twilio": "^4.12.0",
     "typeorm": "^0.3.16"
   },
   "devDependencies": {

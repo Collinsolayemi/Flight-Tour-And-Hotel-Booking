@@ -56,11 +56,11 @@ export class SignInDto {
   public readonly password: string;
 }
 
-
-
 export class ForgotPasswordDto {
+
   @IsNotEmpty({ message: "email is required"})
   @IsEmail()
   @ApiProperty({ example: 'name@example.com' })
   email: string;
 }
+
