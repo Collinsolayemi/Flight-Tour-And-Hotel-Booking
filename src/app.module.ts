@@ -9,6 +9,8 @@ dotenv.config();
 import { JwtModule } from '@nestjs/jwt';
 import { TwilioModule } from 'nestjs-twilio';
 import { TwilioService } from './user/auth/twillo/twilio-service';
+import { Otp } from './user/entities/otp.entity';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -27,13 +29,13 @@ import { TwilioService } from './user/auth/twillo/twilio-service';
       username: process.env.DB_USERNAME,
       password: '',
       database: process.env.DB_NAME,
-      entities: [User],
-      synchronize: true,
+      entities: [__dirname + '/../**/*.entity.{js,ts}'],
+      synchronize: false,
     }),
-    UserModule,
+    UserModule, CloudinaryModule
+
   ],
   controllers: [AppController],
   providers: [AppService, TwilioService],
 })
-  
 export class AppModule {}

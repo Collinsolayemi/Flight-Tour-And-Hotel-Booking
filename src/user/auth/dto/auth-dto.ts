@@ -2,13 +2,17 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsDate,
-  IsDateString,
   IsDefined,
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsPhoneNumber,
   IsString,
   Length,
+  Matches,
+  MaxLength,
+  MinLength,
+  isString,
 } from 'class-validator';
 
 export class SignUpDto {
@@ -28,7 +32,7 @@ export class SignUpDto {
 
   @ApiProperty({ example: 'name@example.com' })
   @IsEmail()
-  public readonly email: string;
+  public email: string;
 
   @IsNotEmpty()
   @ApiProperty({ type: 'string', format: 'binary' })
@@ -37,30 +41,57 @@ export class SignUpDto {
   @ApiProperty({ example: '08154640543' })
   @IsDefined()
   @IsPhoneNumber('NG')
-  public readonly phone_number: string;
+  public phone_number: string;
 
   @IsNotEmpty()
   @IsDate()
   @ApiProperty({ type: Date, format: 'date' })
   public birthday: Date;
+
+  @IsString()
+  @IsOptional()
+  public otp?: string;
+
+  @IsOptional()
+  public otpExpire?: Date;
 }
 
 export class SignInDto {
   @ApiProperty({ example: 'name@example.com' })
   @IsNotEmpty({ message: 'Username cannot be empty' })
-  public readonly username: string;
+  public username: string;
 
   @ApiProperty({ example: 'password' })
   @IsString({ message: 'Password must be a string' })
   @Length(3, 20, { message: 'Password must be between 3 and 20 characters' })
-  public readonly password: string;
+  public password: string;
 }
 
-export class ForgotPasswordDto {
+export class ResetPasswordDto {
+  @IsString()
+  password: string;
 
-  @IsNotEmpty({ message: "email is required"})
-  @IsEmail()
-  @ApiProperty({ example: 'name@example.com' })
+  @IsString()
+  confirmPassword: string;
+
+  @IsOptional()
+  @IsString()
   email: string;
 }
 
+export class ForgotPasswordDto {
+  @ApiProperty({ example: 'name@example.com' })
+  @IsEmail()
+  @IsString()
+  public email: string;
+}
+
+export class VerifyForgetPasswordOtpDto {
+  @IsString()
+  otp: string;
+}
+
+export class VerifySignUpOtpDto {
+  @IsString()
+  otp: string;
+}
