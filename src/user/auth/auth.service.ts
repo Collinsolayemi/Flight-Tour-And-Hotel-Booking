@@ -24,16 +24,15 @@ import { JwtService } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
 import { MailService } from './email/mail-service';
 import { TwilioService } from './twillo/twilio-service';
-import { randomBytes, sign } from 'crypto';
 dotenv.config();
 import { Otp } from '../entities/otp.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
-import { generate } from 'rxjs';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from './guards/auth-guard';
 import { FileInterceptor } from '@nestjs/platform-express';
+
 
 @Injectable()
 export class AuthService {
@@ -49,16 +48,10 @@ export class AuthService {
     private userRepository: Repository<User>,
   ) {}
 
-  //function to generate otp
   generateOtp(): string {
-    const otpLength = 6;
-    const otpChars = '0123456789';
-    let otp = '';
-    for (let i = 0; i < otpLength; i++) {
-      const randomIndex = Math.floor(Math.random() * otpChars.length);
-      otp += otpChars[randomIndex];
-    }
-    return otp;
+    // Generate a random 4-digit OTP
+    const code = Math.floor(1000 + Math.random() * 9000).toString();
+    return code;
   }
 
   async generateToken(args: { id: string; email: string }): Promise<string> {
@@ -69,19 +62,7 @@ export class AuthService {
     });
   }
 
-  @UseGuards(AuthGuard)
-  @ApiBearerAuth('access-token')
-  @Post('/upload/identification')
-  @UseInterceptors(FileInterceptor('file'))
-  async uploadImagToCloudinary(@UploadedFile() file, @Req() req: Request) {
-    try {
-      const upload = await this.cloudinary.uploadImage(file);
 
-      return 
-    } catch (error) {
-      throw new BadRequestException('Error uploading Identification');
-    }
-  }
 
   async signup(signUpDto: SignUpDto) {
     // Check if the email is not already in use
@@ -109,7 +90,6 @@ export class AuthService {
 
     //upload the profile picture to cloudinary
     // const upload = await this.cloudinary.uploadImage(signUpDto.profile_picture);
-   
 
     // Generate a verification otpRepository
     const generatedOtp = this.generateOtp();
@@ -119,9 +99,6 @@ export class AuthService {
     //hash the password
     let passwordHash = await bcrypt.hash(signUpDto.password, 10);
     signUpDto.password = passwordHash;
-
-    //hash the otp in the DB
-    //const otpHash = await bcrypt.hash(generatedOtp, 10);
 
     //const newUser = await this.userService.create(signUpDto);
     const newUser = await this.userRepository.create({
@@ -174,31 +151,31 @@ export class AuthService {
   }
 
   async verifySignUpOtp(verifyOtp: VerifySignUpOtpDto) {
-    const userOtp = await this.otpRepository.findOne({
+    const user = await this.otpRepository.findOne({
       where: { signUpOtp: verifyOtp.otp },
     });
 
-    if (!userOtp) throw new BadRequestException('Invalid OTP');
+    if (!user) throw new BadRequestException('Invalid OTP');
 
     const currentDateTime = new Date();
 
-    if (userOtp.expiredAt < currentDateTime) {
+    if (user.expiredAt < currentDateTime) {
       // OTP has expired, regenerate a new OTP
       const newOtp = this.generateOtp();
       const newExpiration = new Date();
       newExpiration.setMinutes(newExpiration.getMinutes() + 10);
 
       //delete the old otp from database
-      await this.otpRepository.delete(userOtp.id);
+      await this.otpRepository.delete(user.id);
 
       const createOtp = await this.otpRepository.create({
         signUpOtp: newOtp,
-        email: userOtp.email,
+        email: user.email,
         expiredAt: newExpiration,
-        userId: userOtp.id,
+        userId: user.id,
       });
-      userOtp.signUpOtp = newOtp;
-      userOtp.expiredAt = newExpiration;
+      user.signUpOtp = newOtp;
+      user.expiredAt = newExpiration;
       //save the new otp to the database
       await this.otpRepository.save(createOtp);
 
@@ -208,7 +185,7 @@ export class AuthService {
       );
     }
     //delete otp from database
-    await this.otpRepository.delete(userOtp.id);
+    await this.otpRepository.delete(user.id);
 
     return {
       message:
@@ -218,16 +195,18 @@ export class AuthService {
 
   async signIn(signInDto: SignInDto) {
     //check if user already have an account
-    const checkUser = await this.userService.findByUsername(signInDto.username);
+    const user = await this.userRepository.findOne({
+      where: { username: signInDto.username },
+    });
 
-    if (!checkUser) {
+    if (!user) {
       throw new NotFoundException('User not found, please signup');
     }
 
     //compaare stored password with input password
     const compaarePassword = await bcrypt.compare(
       signInDto.password,
-      checkUser.password,
+      user.password,
     );
 
     if (!compaarePassword) {
@@ -238,12 +217,11 @@ export class AuthService {
 
     //generate token for a user when they signIn
     const token = await this.generateToken({
-      id: checkUser.id,
-      email: checkUser.username,
+      id: user.id,
+      email: user.email,
     });
-    //Excluding the password field from the response body
-    const { password: pass, ...others } = checkUser;
-    return { token };
+
+    return { access_token: token, user };
   }
 
   async forgotPassword(forgotPasswordDto: ForgotPasswordDto) {
@@ -258,8 +236,9 @@ export class AuthService {
       );
     }
 
-    const generatedOtp = randomBytes(4).toString('hex');
-    // const generatedOtp =  = await this.generateOtp();
+    //const generatedOtp = randomBytes(4).toString('hex');
+
+    const generatedOtp = await this.generateOtp();
     const otpExpiration = new Date();
     otpExpiration.setMinutes(otpExpiration.getMinutes() + 10);
 
@@ -292,39 +271,44 @@ export class AuthService {
       );
     }
 
-    return { email: forgotPasswordDto.email };
+    return {
+      message: 'check your email for an OTP for verification ',
+      email: forgotPasswordDto.email,
+    };
   }
 
   async image(image: any) {
     const upload = await this.cloudinary.uploadImage(image);
-    return upload
+    return upload;
   }
 
   async verifyForgetPasswordOtp(verifyOtp: VerifyForgetPasswordOtpDto) {
-    const userOtp = await this.otpRepository.findOne({
+    const user = await this.otpRepository.findOne({
       where: { forgetPasswordOtp: verifyOtp.otp },
     });
 
-    if (!userOtp) throw new BadRequestException('Invalid OTP');
+    console.log(user);
+
+    if (!user) throw new BadRequestException('Invalid OTP');
 
     const currentDateTime = new Date();
 
-    if (userOtp.expiredAt < currentDateTime) {
+    if (user.expiredAt < currentDateTime) {
       // OTP has expired, regenerate a new OTP
-      const newOtp = this.generateOtp();
+      const newOtp = this.generateOtp().toString();
       const newExpiration = new Date();
       newExpiration.setMinutes(newExpiration.getMinutes() + 1);
 
       //delete the old otp from database
-      await this.otpRepository.delete(userOtp.id);
+      await this.otpRepository.delete(user.id);
 
-      const createOtp = await this.otpRepository.create({
+      const createOtp = this.otpRepository.create({
         signUpOtp: newOtp,
-        email: userOtp.email,
+        email: user.email,
         expiredAt: newExpiration,
       });
-      userOtp.signUpOtp = newOtp;
-      userOtp.expiredAt = newExpiration;
+      user.signUpOtp = newOtp;
+      user.expiredAt = newExpiration;
       //save the new otp to the database
       await this.otpRepository.save(createOtp);
 
@@ -335,14 +319,12 @@ export class AuthService {
     }
 
     const getUser = await this.userRepository.findOne({
-      where: { email: userOtp.email },
+      where: { email: user.email },
     });
 
     //delete the old otp from database
-    await this.otpRepository.delete(userOtp.id);
+    await this.otpRepository.delete(user.id);
     await this.userRepository.save(getUser);
-
-    console.log(getUser);
 
     return { message: 'congratulation your OTP verification was successful ' };
   }

@@ -42,7 +42,7 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
- @Column()
+  @Column()
   username: string;
 
   @Column()
@@ -57,31 +57,26 @@ export class User {
   @Column()
   profile_picture: string;
 
-  @Column({type: 'date'})
+  @Column({ type: 'date' })
   birthday: Date;
 
   @Column({ nullable: true })
   resetPasswordToken: string;
 
-  @Column({ nullable: true })
-  resetPasswordOtp: string;
+  // @Column({ nullable: true })
+  // resetPasswordOtp: string;
 
-  @Column({ nullable: true })
-  isEmailVerified: boolean;
+  // @Column({ nullable: true })
+  // isEmailVerified: boolean;
 
-  @Column({ nullable: true })
-  signUpPasswordOtp: string;
+  // @Column({ nullable: true })
+  // signUpPasswordOtp: string;
 
   @Column({ nullable: false })
   @CreateDateColumn()
   createdAt: Date;
-
-  
 }
 
 function uuidv4(): string {
   throw new Error('Function not implemented.');
 }
-
-
-

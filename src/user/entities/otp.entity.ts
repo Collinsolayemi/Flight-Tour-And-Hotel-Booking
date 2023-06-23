@@ -1,11 +1,4 @@
-
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-
-
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Otp {
@@ -25,5 +18,5 @@ export class Otp {
   userId: string;
 
   @Column()
-  forgetPasswordOtp: string
+  forgetPasswordOtp: string;
 }

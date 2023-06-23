@@ -8,6 +8,10 @@ import {
   BadRequestException,
   Req,
   UploadedFile,
+  Get,
+  HttpCode,
+  InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
@@ -21,24 +25,31 @@ import {
 import { AuthGuard } from './guards/auth-guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { Request } from 'express';
+import { userInfo } from 'os';
+import { ResponseMessage } from 'src/decorator/response-message.decorator';
+import { verify } from 'crypto';
+import * as dotenv from 'dotenv';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from '../entities/user.entity';
+dotenv.config;
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+  ) {}
 
   @Post('signup')
+  @ResponseMessage('signup successful')
+  @HttpCode(201)
   async signUp(@Body() body: SignUpDto) {
-    const signUpResult = await this.authService.signup(body);
-    return signUpResult;
+    return await this.authService.signup(body);
   }
 
-  // @Post('upload-image')
-  // async uploadImage() {
-  //   const upload = await this.authService.image
-  //   return upload
-  //   }
-
-  @UseGuards(AuthGuard)
   @ApiBearerAuth('access-token')
   @Post('/upload/identification')
   @UseInterceptors(FileInterceptor('file'))
@@ -53,32 +64,51 @@ export class AuthController {
   }
 
   @Post('verify-signup-otp')
+  @HttpCode(201)
   async verifySignupOtp(@Body() body: VerifySignUpOtpDto) {
     const verifySignupOtp = await this.authService.verifySignUpOtp(body);
     return verifySignupOtp;
   }
 
+  
   @Post('signin')
+  @HttpCode(200)
   async signIn(@Body() body: SignInDto) {
     const signInResult = await this.authService.signIn(body);
     return signInResult;
   }
 
   @Post('forgot-password')
+  @HttpCode(200)
   async forgotPassword(@Body(new ValidationPipe()) body: ForgotPasswordDto) {
     const byEmail = await this.authService.forgotPassword(body);
     return byEmail;
   }
 
   @Post('verify-forgot-password-otp')
+  @HttpCode(200)
   async verifyForgotPasswordOtp(@Body() body: VerifyForgetPasswordOtpDto) {
     const verify = await this.authService.verifyForgetPasswordOtp(body);
     return verify;
   }
 
   @Post('reset-password')
+  @HttpCode(200)
   async resetPassword(@Body() body: ResetPasswordDto) {
     const resetPassword = await this.authService.resetPassword(body);
-    await resetPassword;
+    return resetPassword;
+  }
+
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('access-token')
+  @HttpCode(200)
+  @Get('/profile')
+  async getUserProfile(@Req() req) {
+    const user = req.user.email;
+    const getUser = await this.userRepository.findOne({
+      where: { email: user },
+    });
+
+    return getUser;
   }
 }
