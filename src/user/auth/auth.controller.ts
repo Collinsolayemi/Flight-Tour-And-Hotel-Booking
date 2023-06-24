@@ -70,7 +70,6 @@ export class AuthController {
     return verifySignupOtp;
   }
 
-  
   @Post('signin')
   @HttpCode(200)
   async signIn(@Body() body: SignInDto) {

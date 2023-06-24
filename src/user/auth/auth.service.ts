@@ -33,7 +33,6 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from './guards/auth-guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-
 @Injectable()
 export class AuthService {
   clientAppUrl: string;
@@ -61,8 +60,6 @@ export class AuthService {
       secret: process.env.JWT_SECRET,
     });
   }
-
-
 
   async signup(signUpDto: SignUpDto) {
     // Check if the email is not already in use

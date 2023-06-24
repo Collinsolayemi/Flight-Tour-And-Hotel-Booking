@@ -63,5 +63,5 @@ export class Question {
   preferredTravelClimate: string;
 
   @Column()
-  tourAndExcursionIcon: [string, string]
+  tourAndExcursionIcon: string
 }

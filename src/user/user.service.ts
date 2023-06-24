@@ -21,7 +21,7 @@ export class UserService {
     newUser.email = email;
     newUser.username = username;
     newUser.password = password;
-    newUser.birthday = new Date(birthday); 
+    newUser.birthday = new Date(birthday);
     newUser.phone_number = phone_number;
     newUser.profile_picture = profile_picture;
 
@@ -41,12 +41,9 @@ export class UserService {
     return this.repo.findOne({ where: { phone_number } });
   }
 
-
   findAll() {
     return `This action returns all user`;
   }
-
-  
 
   // findOne(id: number) {
   //   return `This action returns a #${id} user`;
@@ -67,7 +64,6 @@ export class UserService {
   remove(id: number) {
     return `This action removes a #${id} user`;
   }
-
 
   async findByResetPasswordToken(token: string) {
     return this.repo.findOne({

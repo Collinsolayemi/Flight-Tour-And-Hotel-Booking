@@ -40,5 +40,5 @@ export class TourDto {
 
   preferredTravelClimate: string;
 
-  tourAndExcursionIcon: [string, string, string, string];
+  tourAndExcursionIcon: string[];
 }
