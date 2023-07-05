@@ -8,16 +8,7 @@ export class MailService {
 
   constructor() {
     // Create a nodemailer transporter
-    // this.transporter = nodemailer.createTransport({
-    //   host: 'smtp.sendgrid.net',
-
-    //   auth: {
-    //     user: 'apikey',
-    //     pass: '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',
-    //     pass: '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',
-    //   },
-    //   secure: true, // Enable secure connection (SSL/TLS)
-    // });
+   
 
 
     
