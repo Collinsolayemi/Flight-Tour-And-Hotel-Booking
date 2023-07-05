@@ -23,7 +23,6 @@ import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
 import { MailService } from './email/mail-service';
-import { TwilioService } from './twillo/twilio-service';
 dotenv.config();
 import { Otp } from '../entities/otp.entity';
 import { InjectRepository } from '@nestjs/typeorm';
