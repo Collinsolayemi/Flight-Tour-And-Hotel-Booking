@@ -31,6 +31,7 @@ export class TourDto {
   inTouchWithLoveOnes: string;
 
   travelMode: string;
+  
 
   longDistanceTravelAndTimeZone: string;
 
