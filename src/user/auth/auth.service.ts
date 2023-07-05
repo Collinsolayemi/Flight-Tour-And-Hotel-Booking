@@ -33,6 +33,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from './guards/auth-guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 
+
 @Injectable()
 export class AuthService {
   clientAppUrl: string;
@@ -133,7 +134,7 @@ export class AuthService {
       - Access exclusive deals and discounts.
       - Create personalized itineraries and save your favorite travel options.
       - Connect with fellow travelers and share experiences on the Travel Hotline Network.\n\n
-      If you encounter any difficulties during the account activation process or have any questions, feel free to reach out to our friendly support team at support@travelhotline.info. We're here to assist you every step of the way.\n\n
+      If you encounter any difficulties during the account activation process or have any questions, feel free to reach out to our friendly support team at <h1>support@travelhotline.info. We're here to assist you every step of the way.\n\n
       We hope you have an incredible journey with Travel Hotline and create unforgettable memories around the world. Happy travels!\n\nBest regards,\n\nThe Travel Hotline Team`,
     });
 
@@ -144,6 +145,10 @@ export class AuthService {
       );
     }
 
+    
+
+    
+    
     return { message: 'Email sent successfully' };
   }
 
