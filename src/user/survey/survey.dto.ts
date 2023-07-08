@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty } from 'class-validator';
-import { CustomOption } from 'src/decorator/custom-option.decorator';
+
 
 export class TourDto {
   travelStartOfTheDay: string;
@@ -31,7 +31,6 @@ export class TourDto {
   inTouchWithLoveOnes: string;
 
   travelMode: string;
-  
 
   longDistanceTravelAndTimeZone: string;
 
