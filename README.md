@@ -1,9 +1,9 @@
-# THE TRAVEL HOTLINE
+# FLIGHT, TOUR AND HOTEL BOOKING 
 
 
 ## Description
 
-### A `Node.JS` _functional project that was built along with_ `Nest.JS`  `dependency injection` FLIGHT BOOKING, CAR RENTAGE AND TOUR BOOKING `mySQL` _for the database_. In this project a user sign up and have the opportuniy to book a flight, also book a hotel to lodge  and rentage or cars for tourism.
+### A `Node.JS` _functional project that was built along with_ `Nest.JS` FLIGHT BOOKING, CAR RENTAGE AND TOUR BOOKING `mySQL` _for the database_. In this project a user sign up and have the opportuniy to book a flight, also book a hotel to lodge  and rentage or cars for tourism.
 
 - A user sign up with `Username`, `Password`, `Email`, `Phone`, `Profile picture` and `Birthday`
 - User will be able to add a bio, a nickname, and upload any photos now if they
