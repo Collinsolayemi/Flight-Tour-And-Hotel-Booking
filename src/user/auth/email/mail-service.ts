@@ -1,4 +1,4 @@
- import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import * as sendGridTransport from 'nodemailer-sendgrid-transport';
 
@@ -8,20 +8,23 @@ export class MailService {
 
   constructor() {
     // Create a nodemailer transporter
-   
 
-
-    
-
-    
-   
+    this.transporter = nodemailer.createTransport({
+      // Configure your email provider settings
+      service: 'gmail',
+      secure: false, // Set to true if using SSL/TLS
+      auth: {
+        user: 'collinsolayemi@gmail.com',
+        pass: 'aavcvxnuwubdpqlm',
+      },
+    });
   }
 
   async send(options: {
     to: string;
     subject: string;
     text: string;
-  }): Promise < boolean > {
+  }): Promise<boolean> {
     try {
       // Compose the email
       const mailOptions = {
@@ -37,10 +40,9 @@ export class MailService {
       console.log('Email sent:', info.messageId);
 
       return true;
-    } catch(error) {
+    } catch (error) {
       console.error('Error sending email:', error);
       return false;
     }
   }
-  }
-
+}

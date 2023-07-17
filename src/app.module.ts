@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+// import { AppController } from './app.controller';
+// import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
@@ -10,6 +10,8 @@ import { JwtModule } from '@nestjs/jwt';
 
 import { Otp } from './user/entities/otp.entity';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { UserController } from './user/user.controller';
+import { UserService } from './user/user.service';
 
 @Module({
   imports: [
@@ -25,12 +27,12 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
       password: '',
       database: process.env.DB_NAME,
       entities: [__dirname + '/../**/*.entity.{js,ts}'],
-      synchronize: false,
+      synchronize: true,
     }),
-    UserModule, CloudinaryModule
-
+    UserModule,
+    CloudinaryModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [UserController],
+  providers: [UserService],
 })
 export class AppModule {}
